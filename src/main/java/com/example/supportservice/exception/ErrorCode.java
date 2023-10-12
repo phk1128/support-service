@@ -19,6 +19,7 @@ public enum ErrorCode {
     ORGANIZATION_NOT_FOUND(HttpStatus.NOT_FOUND),
 
     POINT_NOT_FOUND(HttpStatus.NOT_FOUND),
+    POINT_REFUNDS_NOT_FOUND(HttpStatus.NOT_FOUND),
     POINT_REFUNDS_CONFLICT(HttpStatus.CONFLICT),
 
     CARD_NOT_FOUND(HttpStatus.NOT_FOUND),

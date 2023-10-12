@@ -40,12 +40,10 @@ public class Point {
     }
 
 
+    public void updateRemainAndUsedPoint (Integer usedPoint, Integer remainPoint) {
 
-
-    public void updateRemainAndUsedPoint (Integer usedPoint) {
-
-        this.remainPoint -= usedPoint;
-        this.usedPoint += usedPoint;
+        this.remainPoint = remainPoint;
+        this.usedPoint = usedPoint;
 
     }
 

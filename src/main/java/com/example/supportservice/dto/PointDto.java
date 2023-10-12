@@ -45,10 +45,9 @@ public class PointDto {
     }
 
     @Getter
-    public static class Update {
+    public static class UpdateRefunds {
 
         private boolean result;
-        private String status;
 
     }
 
