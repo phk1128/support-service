@@ -50,13 +50,14 @@ public class SupportServiceImpl implements SupportService {
 
 
         int remainPoint = point.getRemainPoint() - dto.getAmount();
+        int usedPoint = point.getUsedPoint() + dto.getAmount();
 
 
         if (remainPoint < 0) {
             throw new AppException(ErrorCode.SUPPORT_CONFLICT, "보유하고 있는 후원금이 부족합니다.");
         }
 
-        point.updateRemainAndUsedPoint(dto.getAmount());
+        point.updateRemainAndUsedPoint(usedPoint, remainPoint);
 
         pointRepository.save(point);
         memberRepository.save(member);
