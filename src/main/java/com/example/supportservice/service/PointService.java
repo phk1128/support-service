@@ -11,4 +11,6 @@ public interface PointService {
     PointDto.ResponsePoint charge(PointDto.Charge dto);
 
     PointDto.ResponsePointRefunds refunds(Long pointId, PointDto.Refunds dto);
+
+    PointDto.ResponsePointRefunds updateRefunds(Long pointRefundsId, PointDto.UpdateRefunds dto);
 }
