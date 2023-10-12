@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/side_project_database?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
+    password: ghdnfj12p~
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      open-in-view: false
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+  mvc:
+    converters:
+      preferred-json-mapper: gson
+  jwt:
+    secret: qwqwqwpasjkdiojad1123asdasfsadfsadfsadf131231sdfasdfasfdd22
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+kakao:
+  api:
+    client-id: 8ed6cc6083b05da0f76c1bb06b78dce0
+    redirect-uri: http://localhost:8080/api/v1/kakao/callback
+    client-secret: qStzAsIDzTYmUQ19F0kwVs5XOwUouCkC
+    grant-type: authorization_code
+    token-url: https://kauth.kakao.com/oauth/token
+    userinfo-url: https://kapi.kakao.com/v2/user/me
+
