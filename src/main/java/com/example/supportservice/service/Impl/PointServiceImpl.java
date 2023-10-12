@@ -81,4 +81,32 @@ public class PointServiceImpl implements PointService {
 
         return new PointDto.ResponsePointRefunds().toDto(pointRefundsRepository.save(newPointRefunds));
     }
+
+    @Override
+    @Transactional
+    public PointDto.ResponsePointRefunds updateRefunds(Long pointRefundsId, PointDto.UpdateRefunds dto) {
+        PointRefunds pointRefunds = pointRefundsRepository.findById(pointRefundsId)
+                .orElseThrow(() -> new AppException(ErrorCode.POINT_REFUNDS_NOT_FOUND, "포인트 환급 내역이 없습니다."));
+
+        PointRefundsStatus status = PointRefundsStatus.CANCEL;
+        LocalDateTime completionDate = null;
+
+        if(dto.isResult()) {
+            status = PointRefundsStatus.REFUNDS;
+            completionDate = LocalDateTime.now();
+        }
+        else {
+            Point point = pointRefunds.getPoint();
+            int remainPoint = point.getRemainPoint() + pointRefunds.getAmount();
+            int usedPoint = point.getUsedPoint();
+
+            point.updateRemainAndUsedPoint(remainPoint, usedPoint);
+            pointRepository.save(point);
+        }
+
+        pointRefunds.update(status, completionDate);
+
+
+        return new PointDto.ResponsePointRefunds().toDto(pointRefundsRepository.save(pointRefunds));
+    }
 }
