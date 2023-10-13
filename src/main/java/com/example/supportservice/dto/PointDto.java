@@ -3,6 +3,7 @@ package com.example.supportservice.dto;
 import com.example.supportservice.domain.payment.model.PaymentStatus;
 import com.example.supportservice.domain.point.model.Point;
 import com.example.supportservice.domain.point.model.PointRefunds;
+import com.example.supportservice.domain.point.model.PointRefundsBank;
 import com.example.supportservice.domain.point.model.PointRefundsStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
