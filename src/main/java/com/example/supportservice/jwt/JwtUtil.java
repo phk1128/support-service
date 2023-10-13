@@ -38,7 +38,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer=";
-    private static final long TOKEN_TIME = 1000L; // 토큰 유효시간 60분
+    private static final long TOKEN_TIME = 60*60*1000L; // 토큰 유효시간 60분
     private static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L; // 리프레쉬 토큰 유효기간 14일
 
     private final UserDetailsServiceImpl userDetailsService;
