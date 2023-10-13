@@ -36,14 +36,17 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     @Override
     @Transactional
-    public SubscribeDto.Response save(SubscribeDto.Save dto) {
+    public SubscribeDto.Response save(Long memberId,SubscribeDto.Save dto) {
 
-        Member member = memberRepository.findById(dto.getMemberId())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AppException((ErrorCode.MEMBER_NOT_FOUND), "회원을 찾을 수 없습니다."));
 
         Organization organization = organizationRepository.findById(dto.getOrganizationId())
                 .orElseThrow(() -> new AppException((ErrorCode.ORGANIZATION_NOT_FOUND), "기관을 찾을 수 없습니다."));
 
+        if(subscribeRepository.existsByOrganization(organization)) {
+            throw new AppException(ErrorCode.SUBSCRIBE_DUPLICATED, "이미 정기후원중인 기관입니다.");
+        }
 
         Subscribe newSubscribe = Subscribe.builder()
                 .startDate(LocalDateTime.now())
@@ -54,9 +57,10 @@ public class SubscribeServiceImpl implements SubscribeService {
                 .organization(organization)
                 .build();
 
+        cardService.save(dto.getCardCompany(),dto.getCardNumber(),member);
         paymentService.save(dto.getCardNumber(), member, dto.getAmount(), dto.getPaymentType(), "SUBSCRIBE", newSubscribe);
 
-        return new SubscribeDto.Response().toDto( subscribeRepository.save(newSubscribe));
+        return new SubscribeDto.Response().toDto(subscribeRepository.save(newSubscribe));
     }
     @Override
     @Transactional
@@ -91,13 +95,15 @@ public class SubscribeServiceImpl implements SubscribeService {
                 paymentService.save(cardNumber,member, amount,"CARD", "SUBSCRIBE",subscribe);
                 subscribe.update(startDate, endDate.plusMonths(1), SubscribeStatus.SUBSCRIBE);
 
+                Long subscribeId = subscribeRepository.save(subscribe).getId();
+                return subscribeId + " 정기후원완료";
             }
-            Long subscribeId = subscribeRepository.save(subscribe).getId();
-            return subscribeId + " 구독갱신";
+
+            return String.format("정기후원ID:%s 실패사유: %s 후원날짜가 아닙니다. ",subscribe.getId(), subscribe.getEndDate());
 
         } catch (AppException e) {
             Long subscribeId = subscribeRepository.save(subscribe).getId();
-            return subscribeId + " 구독갱신실패 사유: " + e.getMessage();
+            return String.format("정기후원ID:%s 실패사유: %s ",subscribeId, e.getMessage());
         }
 
     }

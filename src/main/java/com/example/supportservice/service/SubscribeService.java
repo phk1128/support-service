@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SubscribeService {
 
-    SubscribeDto.Response save(SubscribeDto.Save dto);
+    SubscribeDto.Response save(Long memberId, SubscribeDto.Save dto);
 
     List<String> updateAllSubscribe();
 

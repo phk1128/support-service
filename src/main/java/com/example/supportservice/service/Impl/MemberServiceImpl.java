@@ -98,6 +98,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberDto.Response updatePassword(Long memberId, MemberDto.UpdatePassword dto) {
 
         Member member = memberRepository.findById(memberId)
