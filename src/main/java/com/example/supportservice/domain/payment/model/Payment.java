@@ -35,8 +35,8 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentItem item;
 
-
-    @ManyToOne
+    // CascadeType.ALL 이므로 Payment 객체가 영속화(DB에 저장) 될 때 Subscribe 객체도 영속화가 된다.
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SUBSCRIBE_ID",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Subscribe subscribe;
 
