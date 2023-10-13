@@ -8,23 +8,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum OrganizationStatus {
 
-    ENABLE(Status.ENABLE),
-    DISABLE(Status.DISABLE);
+    OPENED(Status.OPENED),
+    CLOSED(Status.CLOSED);
 
     private final String status;
 
     public static class Status {
-        public static final String ENABLE = "후원가능";
-        public static final String DISABLE = "후원불가능";
+        public static final String OPENED = "개관";
+        public static final String CLOSED = "폐관";
 
     }
 
     public static OrganizationStatus fromString(String status) {
         switch (status) {
-            case "ENABLE":
-                return ENABLE;
-            case "DISABLE":
-                return DISABLE;
+            case "OPENED":
+                return OPENED;
+            case "CLOSED":
+                return CLOSED;
         }
 
         return null;
