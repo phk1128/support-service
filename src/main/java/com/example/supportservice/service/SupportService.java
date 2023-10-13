@@ -8,6 +8,8 @@ public interface SupportService {
 
     SupportDto.Response save(SupportDto.Save dto);
 
+    List<SupportDto.Response> getAllSupport(Long memberId);
+
 
 
 }

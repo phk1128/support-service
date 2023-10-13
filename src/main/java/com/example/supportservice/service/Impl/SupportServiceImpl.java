@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,6 +35,16 @@ public class SupportServiceImpl implements SupportService {
     private final OrganizationRepository organizationRepository;
     private final PointRepository pointRepository;
 
+    @Override
+    @Transactional
+    public List<SupportDto.Response> getAllSupport(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND, "회원 정보를 찾을 수 없습니다."));
+
+        return supportRepository.findAllByMember(member).stream()
+                .map(support -> new SupportDto.Response().toDto(support))
+                .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional
