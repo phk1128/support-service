@@ -5,10 +5,7 @@ import com.example.supportservice.dto.PointDto;
 import com.example.supportservice.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,15 +14,15 @@ public class PointController {
 
     private final PointService pointService;
 
-    @PostMapping("/charge")
-    public ResponseEntity<PointDto.ResponsePoint> charge(PointDto.Charge dto) {
-        return ResponseEntity.ok(pointService.charge(dto));
+    @PostMapping("/charge/{memberId}")
+    public ResponseEntity<PointDto.ResponsePoint> charge(@PathVariable("memberId") Long memberId,@RequestBody PointDto.Charge dto) {
+        return ResponseEntity.ok(pointService.charge(memberId,dto));
 
     }
 
-    @PostMapping("/refunds/{id}")
-    public ResponseEntity<PointDto.ResponsePointRefunds> refunds(@PathVariable("id") Long pointId, PointDto.Refunds dto) {
-        return ResponseEntity.ok(pointService.refunds(pointId,dto));
+    @PostMapping("/refunds/{memberId}")
+    public ResponseEntity<PointDto.ResponsePointRefunds> refunds(@PathVariable("memberId") Long memberId, @RequestBody PointDto.Refunds dto) {
+        return ResponseEntity.ok(pointService.refunds(memberId,dto));
     }
 
 

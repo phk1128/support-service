@@ -8,9 +8,9 @@ public interface PointService {
 
 
     void save(Member member);
-    PointDto.ResponsePoint charge(PointDto.Charge dto);
+    PointDto.ResponsePoint charge(Long memberId ,PointDto.Charge dto);
 
-    PointDto.ResponsePointRefunds refunds(Long pointId, PointDto.Refunds dto);
+    PointDto.ResponsePointRefunds refunds(Long memberId, PointDto.Refunds dto);
 
     PointDto.ResponsePointRefunds updateRefunds(Long pointRefundsId, PointDto.UpdateRefunds dto);
 }

@@ -48,9 +48,9 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
-    public PointDto.ResponsePoint charge(PointDto.Charge dto) throws AppException{
+    public PointDto.ResponsePoint charge(Long memberId,PointDto.Charge dto) throws AppException{
 
-        Member member = memberRepository.findById(dto.getMemberId())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AppException((ErrorCode.MEMBER_NOT_FOUND), "회원을 찾을 수 없습니다."));
 
         Point point = pointRepository.findByMember(member)
@@ -64,9 +64,13 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
-    public PointDto.ResponsePointRefunds refunds(Long pointId, PointDto.Refunds dto) {
-        Point point = pointRepository.findById(pointId)
-                .orElseThrow(() -> new AppException(ErrorCode.POINT_NOT_FOUND, "포인트 정보를 찾을 수 없습니다."));
+    public PointDto.ResponsePointRefunds refunds(Long memberId, PointDto.Refunds dto) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException((ErrorCode.MEMBER_NOT_FOUND), "회원을 찾을 수 없습니다."));
+
+        Point point = pointRepository.findByMember(member)
+                .orElseThrow(() -> new AppException((ErrorCode.POINT_NOT_FOUND), "포인트 정보를 찾을 수 없습니다."));
 
         int remain = point.getRemainPoint() - dto.getAmount();
 
