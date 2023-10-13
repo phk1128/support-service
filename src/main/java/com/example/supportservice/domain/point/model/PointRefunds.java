@@ -23,7 +23,7 @@ public class PointRefunds {
 
     private LocalDateTime requestDate;
 
-    private String bank;
+    private PointRefundsBank bank;
 
     private String account;
 
@@ -36,7 +36,7 @@ public class PointRefunds {
     private Point point;
 
     @Builder
-    public PointRefunds(String bank, String account, Integer amount, LocalDateTime requestDate) {
+    public PointRefunds(PointRefundsBank bank, String account, Integer amount, LocalDateTime requestDate) {
         this.bank = bank;
         this.account = account;
         this.amount = amount;
