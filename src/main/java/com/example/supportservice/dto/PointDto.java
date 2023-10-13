@@ -17,7 +17,6 @@ public class PointDto {
     @Getter
     public static class Charge {
 
-        private Long memberId;
         private String cardNumber;
         private String cardCompany;
         private Integer amount;
@@ -34,7 +33,7 @@ public class PointDto {
 
         public PointRefunds toEntity(Point point) {
             return PointRefunds.builder()
-                    .bank(bank)
+                    .bank(PointRefundsBank.fromString(bank))
                     .account(account)
                     .amount(amount)
                     .requestDate(LocalDateTime.now())
@@ -82,7 +81,7 @@ public class PointDto {
     public static class ResponsePointRefunds {
 
         private Long pointRefundsId;
-        private String bank;
+        private PointRefundsBank bank;
         private String account;
         private Integer amount;
         private String requestDate;
@@ -96,7 +95,7 @@ public class PointDto {
                     .account(pointRefunds.getAccount())
                     .amount(pointRefunds.getAmount())
                     .requestDate(pointRefunds.getRequestDate().toString())
-                    .completionDate(pointRefunds.getCompletionDate().toString())
+                    .completionDate(pointRefunds.getCompletionDate() == null ? "" : pointRefunds.getCompletionDate().toString())
                     .status(pointRefunds.getStatus())
                     .build();
 

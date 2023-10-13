@@ -4,15 +4,16 @@ import com.example.supportservice.domain.member.model.Member;
 import com.example.supportservice.domain.member.model.MemberJoinType;
 import com.example.supportservice.domain.member.model.MemberRoleEnum;
 import com.example.supportservice.domain.member.model.MemberStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+
 
 public class MemberDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Join {
 
         private String email;
@@ -60,9 +61,8 @@ public class MemberDto {
     @AllArgsConstructor
     public static class Response {
 
-        private Long id;
+        private Long memberId;
         private String name;
-        private Integer point;
         private MemberStatus status;
         private String joinDate;
         private String message;
@@ -71,7 +71,7 @@ public class MemberDto {
         public Response toDto(Member member, String message){
 
             return Response.builder()
-                    .id(member.getId())
+                    .memberId(member.getId())
                     .name(member.getName())
                     .status(member.getStatus())
                     .joinDate(member.getJoinDate().toString())
