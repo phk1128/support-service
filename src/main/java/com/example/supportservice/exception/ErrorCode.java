@@ -27,6 +27,8 @@ public enum ErrorCode {
 
     PAYMENT_CONFLICT(HttpStatus.CONFLICT),
 
+    SUBSCRIBE_DUPLICATED(HttpStatus.CONFLICT),
+
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND);
 
 

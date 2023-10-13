@@ -18,7 +18,6 @@ public class SubscribeDto {
         private String paymentType;
         private String cardNumber;
         private String cardCompany;
-        private Long memberId;
         private Long organizationId;
         private Integer amount;
     }
