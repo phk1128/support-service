@@ -36,6 +36,13 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+    public MemberDto.Response getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND, "회원 정보를 찾을 수 없습니다."));
+        return new MemberDto.Response().toDto(member, "회원정보 조회 완료");
+    }
+
+    @Override
     @Transactional
     public MemberDto.Response join(MemberDto.Join dto) {
 
@@ -120,4 +127,6 @@ public class MemberServiceImpl implements MemberService {
 
         return new MemberDto.Response().toDto(memberRepository.save(member), "비밀번호 변경이 완료되었습니다.");
     }
+
+
 }

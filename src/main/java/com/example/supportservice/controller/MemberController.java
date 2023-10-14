@@ -19,6 +19,11 @@ public class MemberController {
     private final KakaoLoginService kakaoLoginService;
 
 
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberDto.Response> getMember(@PathVariable("memberId") Long memberId) {
+        return ResponseEntity.ok(memberService.getMember(memberId));
+    }
+
 
     @PostMapping("/join")
     public ResponseEntity<MemberDto.Response> join(@RequestBody MemberDto.Join dto){

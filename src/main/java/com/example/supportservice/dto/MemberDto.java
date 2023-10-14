@@ -61,6 +61,8 @@ public class MemberDto {
     @AllArgsConstructor
     public static class Response {
 
+
+        private String email;
         private Long memberId;
         private String name;
         private MemberStatus status;
@@ -71,6 +73,7 @@ public class MemberDto {
         public Response toDto(Member member, String message){
 
             return Response.builder()
+                    .email(member.getEmail())
                     .memberId(member.getId())
                     .name(member.getName())
                     .status(member.getStatus())

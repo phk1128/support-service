@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface MemberService {
 
+    MemberDto.Response getMember(Long memberId);
+
     MemberDto.Response join(MemberDto.Join dto);
 
     MemberDto.Response login(String email, String password, HttpServletResponse response);
