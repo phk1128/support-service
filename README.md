@@ -26,7 +26,7 @@
 
 ### Authorization
 1. AccessToken, RefreshToken 발급 절차(with Redis)
-![img_1.png](img_1.png)
+![img.png](img.png)
   
 
 * Access Token(In header,cookie): 유지시간 60분<br>
@@ -45,7 +45,7 @@ Refresh Token(In Redis): 유지기간 14일<br>
 
 
 2. Spring Security 인증 절차
-![img_2.png](img_2.png)
+![img_1.png](img_1.png)
 
 * JwtAuthFilter (src/main/java/com/example/supportservice/jwt/JwtAuthFilter.java) <br>
 유효한 Jwt가 존재한다면 이를 검증하는 커스텀 필터를 통과한다.<br>
