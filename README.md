@@ -59,5 +59,10 @@ Authentication(인증 객체)를 만들어서 ID/PW를 저장하고, Authenticat
 인증처리가 완료되면 인증객체를 SecurityContext에 저장한다.
 
 
+### ERD
+![image](https://github.com/phk1128/support-service/assets/122284322/da9d92d3-a091-4786-8e78-cae2db672846)
+
+
+
 
 
