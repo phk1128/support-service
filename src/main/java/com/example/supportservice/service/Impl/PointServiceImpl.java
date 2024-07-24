@@ -8,6 +8,7 @@ import com.example.supportservice.domain.point.model.PointRefundsStatus;
 import com.example.supportservice.domain.point.repository.PointRepository;
 import com.example.supportservice.domain.point.repository.PointRefundsRepository;
 import com.example.supportservice.dto.PointDto;
+import com.example.supportservice.dto.PointDto.ResponsePoint;
 import com.example.supportservice.exception.AppException;
 import com.example.supportservice.exception.ErrorCode;
 import com.example.supportservice.service.PaymentService;
@@ -41,8 +42,6 @@ public class PointServiceImpl implements PointService {
         newPoint.setMember(member);
 
         pointRepository.save(newPoint);
-
-
 
     }
 

@@ -129,7 +129,6 @@ public class JwtUtil {
         Date expireDate = new Date(date.getTime() + REFRESH_TOKEN_TIME);
 
 
-
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setClaims(claims)

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberController {
 
     private final MemberService memberService;
-    private final KakaoLoginService kakaoLoginService;
 
 
     @GetMapping("/{memberId}")

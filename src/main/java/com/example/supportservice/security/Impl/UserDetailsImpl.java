@@ -19,9 +19,6 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private final Member member;
-    private final String password;
-    private final String email;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,12 +34,12 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.member.getEmail();
     }
 
     @Override
