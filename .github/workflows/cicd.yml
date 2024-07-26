@@ -109,5 +109,9 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            sudo docker stop ${{env.CURRENT_UPSTREAM}}
-            sudo docker rm ${{env.CURRENT_UPSTREAM}}
+            if [ -n "${{ env.CURRENT_UPSTREAM }}" ]; then
+              sudo docker stop ${{ env.CURRENT_UPSTREAM }}
+              sudo docker rm ${{ env.CURRENT_UPSTREAM }}
+            else
+              echo "CURRENT_UPSTREAM is not set. Skipping stop and remove."
+            fi
