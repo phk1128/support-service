@@ -109,9 +109,10 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            if [ -n "${{ env.CURRENT_UPSTREAM }}" ]; then
+            if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${{ env.CURRENT_UPSTREAM }}\$"; then
+              echo "Stopping and removing container ${{ env.CURRENT_UPSTREAM }}"
               sudo docker stop ${{ env.CURRENT_UPSTREAM }}
               sudo docker rm ${{ env.CURRENT_UPSTREAM }}
             else
-              echo "CURRENT_UPSTREAM is not set. Skipping stop and remove."
+              echo "Container ${{ env.CURRENT_UPSTREAM }} does not exist. Skipping stop and remove."
             fi
