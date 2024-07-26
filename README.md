@@ -71,12 +71,12 @@ Refresh Token(In Redis): 유지기간 14일<br>
   - UsernamePasswordAuthenticationFilter 상속받아 커스텀 필터를 구현하면, 기존의 인증처리 흐름을 변경하지 않고 JWT 발급 기능을 추가할 수 있음, 이는 스프링 시큐리티의 일관된 인증 처리 흐름을 유지하는 데 도움이 된다.
 
 ### Infra
-![img_4.png](img_4.png)
+![image](https://github.com/user-attachments/assets/7921de66-622f-4a9e-bea3-4553599da8e6)
 - 클라이언트가 운영서버에 요청을 보내면 nginx는 리버스 프록시기능을 이용해 해당 요청을 springboot서버에 전달한다.
 - 배포시에는 블루, 그린 중 현재 꺼져 있는 놈으로 컨테이너를 빌드한다
 
 ### CI/CD
-![img_3.png](img_3.png)
+![image](https://github.com/user-attachments/assets/7920f57a-573e-4e96-a361-3d5ea391e1fe)
 - CI/CD는 아래와 같이 순차적으로 진행된다
   - master 브랜치에 push 이벤트가 발생하면 github actions가 동작한다
   - springboot 어플리케이션을 테스트 및 빌드한다
