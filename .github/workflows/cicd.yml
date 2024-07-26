@@ -23,7 +23,7 @@ jobs:
       - name: Build with Gradle # application.yml을 생성한고 build한다.
         run: |
           rm -rf ./src/main/resources/application.yml
-          echo ${{secrets.APPLICATION_PROPERTIES}}  > ./src/main/resources/application.yml
+          echo "${{secrets.APPLICATION_PROPERTIES}}"  > ./src/main/resources/application.yml
           chmod +x ./gradlew
           ./gradlew clean build
 
