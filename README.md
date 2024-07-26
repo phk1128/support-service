@@ -14,7 +14,9 @@
   Spring Security + JWT<br>
 
 - #### Database
-  MySQL / Redis
+  MySQL(EC2) / Redis(EC2)
+- #### CI/CD
+  github action
 
 ### About
 * Spring Security + Jwt 인증절차 학습을 위한 토이 프로젝트
@@ -57,6 +59,8 @@ Refresh Token(In Redis): 유지기간 14일<br>
 ID/Password를 사용하는 Form기반 유저 인증을 처리하는 역할을 한다.<br>
 Authentication(인증 객체)를 만들어서 ID/PW를 저장하고, AuthenticationManager에게 인증처리를 맡긴다.<br>
 인증처리가 완료되면 인증객체를 SecurityContext에 저장한다.
+
+### Infra
 
 
 ### ERD

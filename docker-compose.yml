@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app:
+    image: support-service:v1
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://54.180.163.94:3306/mysql
+      SPRING_DATASOURCE_USERNAME: phk1128
+      SPRING_DATASOURCE_PASSWORD: 1128
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_REDIS_HOST: 54.180.163.94
+      SPRING_REDIS_PORT: 6379

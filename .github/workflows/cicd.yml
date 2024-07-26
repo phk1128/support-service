@@ -1,0 +1,113 @@
+name: CICD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 #플젝을 자동으로 github-action에 clone 해준다.
+      - name: Install JDK 11 # actions/setup-java@v3을 사용해서 Java11을 설치한다.
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Build with Gradle # application.yml을 생성한고 build한다.
+        run: |
+          rm -rf ./src/main/resources/application.yml
+          echo ${{secrets.APPLICATION_PROPERTIES}}  > ./src/main/resources/application.yml
+          chmod +x ./gradlew
+          ./gradlew clean build
+
+      - name: Login to DockerHub # docker/login-action@v1을 이용해서 도커허브에 로그인한다.
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker # 도커를 빌드
+        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/support-service .
+      - name: Push Docker # 허브에 푸시
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/support-service:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set target IP # 현재 실행 중인 서버가 블루,그린 중 어떤것인지 확인한다.
+        #1.EC2 상태가 200 이면 /env를 날려서 현재 실행중인 놈이 블루,그린 중 어떤것인지 확인한다.
+        #2.EC2 상태가 200이 아니면 green으로 설정
+        #3.$GITHUB_ENV는 해당 변수를 전역변수로 등록하겠다는것
+        #4.현재 업스트림(켜져있는)것이 블루면 멈춰있는 것은 그린
+        #5.결국에는 멈춰있는놈에게 배포를 하게됨
+        run: |
+          STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.EC2_HOST }}/env")
+          echo $STATUS
+          if [ $STATUS = 200 ]; then
+            CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.EC2_HOST }}/env")
+          else
+            CURRENT_UPSTREAM=green
+          fi
+          echo CURRENT_UPSTREAM=$CURRENT_UPSTREAM >> $GITHUB_ENV
+          if [ $CURRENT_UPSTREAM = blue ]; then
+            echo "CURRENT_PORT=8081" >> $GITHUB_ENV
+            echo "STOPPED_PORT=8082" >> $GITHUB_ENV
+            echo "TARGET_UPSTREAM=green" >> $GITHUB_ENV
+          else
+            echo "CURRENT_PORT=8082" >> $GITHUB_ENV
+            echo "STOPPED_PORT=8081" >> $GITHUB_ENV
+            echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
+          fi
+
+      - name: Docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.EC2_USERNAME }}
+          host: ${{ secrets.EC2_HOST }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          #도커허브에 올려놓은 도커이미지를 pull해온다.
+          #EC2의 도커 컴포즈 업을 이용하여 도커이미지를 실행한다.
+          #전역 변수 env.TARGET_UPSTREAM값에 따라 블루, 그린이 결정된다.
+          script: |
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/support-service:latest
+            sudo docker-compose -f docker-compose-${{env.TARGET_UPSTREAM}}.yml up -d
+
+      # jtalk/url-health-check-action@v3을 이용해서 정지된놈이 위에 도커 컴포즈에 실행이 됐는지 확인한다.
+      - name: Check deploy server URL
+        uses: jtalk/url-health-check-action@v3
+        with:
+          url: http://${{ secrets.EC2_HOST }}:${{env.STOPPED_PORT}}/env
+          max-attempts: 5
+          retry-delay: 20s
+
+      # nginx의 설정을 새로 배포된 놈으로 리다이렉션하게 변경하고 리로드 시킨다.
+      - name: Change nginx upstream
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            sudo docker exec -i nginxserver bash -c 'echo "set \$service_url ${{ env.TARGET_UPSTREAM }};" > /etc/nginx/conf.d/service-env.inc && nginx -s reload' 
+
+      # 현재 실행되고 있던놈을 종료시킨다.
+      - name: Stop current server
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.EC2_USERNAME }}
+          host: ${{ secrets.EC2_HOST }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            sudo docker stop ${{env.CURRENT_UPSTREAM}}
+            sudo docker rm ${{env.CURRENT_UPSTREAM}}

@@ -41,6 +41,8 @@ public class SecurityConfig {
 
         //URL Mapping
         httpSecurity.authorizeHttpRequests()
+                .antMatchers(HttpMethod.GET, "/hc").permitAll()
+                .antMatchers(HttpMethod.GET, "/env").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/member/join").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .antMatchers("/api/v1/kakao/**").permitAll()
